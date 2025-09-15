@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -39,6 +38,8 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.okio)
+            implementation(libs.kotlinx.serialization.json)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -71,9 +72,26 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    sourceSets {
+        getByName("main") {
+            assets.srcDirs("src/commonMain/resources")
+        }
+    }
 }
 
 dependencies {
     debugImplementation(compose.uiTooling)
 }
 
+tasks.matching { it.name.contains("linkDebugFrameworkIos") }.configureEach {
+    doLast {
+        val frameworkDir = outputs.files.singleFile
+        val resourcesDir = frameworkDir.parentFile.resolve("Resources")
+        resourcesDir.mkdirs()
+
+        copy {
+            from("src/commonMain/resources")
+            into(resourcesDir)
+        }
+    }
+}
