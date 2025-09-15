@@ -72,26 +72,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    sourceSets {
-        getByName("main") {
-            assets.srcDirs("src/commonMain/resources")
-        }
-    }
 }
 
 dependencies {
     debugImplementation(compose.uiTooling)
-}
-
-tasks.matching { it.name.contains("linkDebugFrameworkIos") }.configureEach {
-    doLast {
-        val frameworkDir = outputs.files.singleFile
-        val resourcesDir = frameworkDir.parentFile.resolve("Resources")
-        resourcesDir.mkdirs()
-
-        copy {
-            from("src/commonMain/resources")
-            into(resourcesDir)
-        }
-    }
 }
