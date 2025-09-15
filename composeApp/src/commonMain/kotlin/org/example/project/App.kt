@@ -12,11 +12,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
-fun App(jsonResourceParser: JsonResourceParser) {
+fun App() {
     MaterialTheme {
         var data by remember { mutableStateOf("Loading...") }
         LaunchedEffect(Unit) {
-            data = jsonResourceParser.loadUserData().toString()
+            data = JsonResourceParser().loadUserData().toString()
         }
         Text(data)
     }
